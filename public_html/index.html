@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>약국 위치 정보 조회</title>
+    <script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gki3tbbiw2&amp;submodules=panorama,geocoder,drawing,visualization"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="map" style="width:100%;height:400px;"></div>
+    <script>
+        $(async () => {
+            let XY = await getLocation();
+            alert("위도" + XY.lat);
+            alert("경도" + XY.lng);
+
+            var mapOptions = {
+                center: new naver.maps.LatLng(XY.lat, XY.lng),
+                zoom: 18
+            };
+            var map = new naver.maps.Map('map', mapOptions);
+        })
+        async function getLocation() {
+            let XY = new Object();
+            if (navigator.geolocation) {
+                let promise = new Promise((resolve, rejected) => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        resolve(position);
+                    });
+                });
+                let position = await promise;
+                XY.lat = position.coords.latitude;
+                XY.lng = position.coords.longitude;
+            }
+            return XY;
+        }
+    </script>
+</body>
+
+</html>

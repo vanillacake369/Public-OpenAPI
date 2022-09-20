@@ -26,6 +26,28 @@
                 zoom: 18
             };
             var map = new naver.maps.Map('map', mapOptions);
+
+            $.ajax({
+                url: "/pharmach_list",
+                type: "GET",
+                cache: false,
+                dataType: "json",
+                data: {
+                    "Q0": "서울특별시",
+                    "Q1": "강남구",
+                    "QT": "",
+                    "QN": "",
+                    "ORD": "",
+                    "pageNo": "1",
+                    "numOfRows": "1000"
+                },
+                success: (result) => {
+                    console.log(result);
+                },
+                error: (req, status, err) => {
+
+                }
+            })
         })
         async function getLocation() {
             let XY = new Object();

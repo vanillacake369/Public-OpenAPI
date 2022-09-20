@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path'); // 파일, 디렉터리 정보 관리 
 const morgan = require('morgan'); //요청과 응답에 대한 정보 콘솔 기록
-const { default: axios } = require('axios');
+const { axios } = require('axios');
 
 const app = express();
 const port = process.env.port || 3006;
@@ -17,7 +17,7 @@ app.get('/pharmach_list', (req, res) => {
     const response = null;
     try {
         const api = async () => {
-            response = await axios.get("http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire", {
+            result = await axios.get("http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire", {
                 params: {
                     "serviceKey": "fcrUrXZBzKF80weBuXdbezoZ8IcTtdTBGY0SdJnp1Fpr5ItzPvjQiquY1BIXahkKDqn1bT2LmEzEI%2FzIGxdqOQ%3D%3D",
                     "Q0": "서울특별시",
@@ -30,8 +30,13 @@ app.get('/pharmach_list', (req, res) => {
                 }
             });
         }
-        return response;
+        api.then((result)=>{
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            // res.setHeader() is a native method of Node.js and res.header() is an alias of res.set() method from Express framework.
+            res.json(result.data.response.body);
+        })
     } catch (e) {
         console.log(e);
     }
+    return response;
 });
